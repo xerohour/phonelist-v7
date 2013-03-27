@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PhoneDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="PhoneDBEntities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="Phones" EntityType="PhoneDBModel.Phone" />
+    <EntitySet Name="PhoneCDs" EntityType="PhoneDBModel.PhoneCD" />
+    <AssociationSet Name="FK_Phone_PhoneCD" Association="PhoneDBModel.FK_Phone_PhoneCD">
+      <End Role="PhoneCD" EntitySet="PhoneCDs" />
+      <End Role="Phone" EntitySet="Phones" />
+    </AssociationSet>
+    <EntitySet Name="Applicants" EntityType="PhoneDBModel.Applicant" />
+    <AssociationSet Name="FK_Phone_Applicant" Association="PhoneDBModel.FK_Phone_Applicant">
+      <End Role="Applicant" EntitySet="Applicants" />
+      <End Role="Phone" EntitySet="Phones" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Phone">
+    <Key>
+      <PropertyRef Name="PHONE_ID" />
+    </Key>
+    <Property Name="PHONE_ID" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="PHONE_CD" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="false" />
+    <Property Name="PHONE_TX" Type="Decimal" Nullable="false" Precision="10" Scale="0" />
+    <Property Name="CREATE_DT" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="MOD_DT" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="APPLICANT_ID" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <NavigationProperty Name="PhoneCD" Relationship="PhoneDBModel.FK_Phone_PhoneCD" FromRole="Phone" ToRole="PhoneCD" />
+    <NavigationProperty Name="Applicant" Relationship="PhoneDBModel.FK_Phone_Applicant" FromRole="Phone" ToRole="Applicant" />
+  </EntityType>
+  <EntityType Name="PhoneCD">
+    <Key>
+      <PropertyRef Name="PHONE_CD" />
+    </Key>
+    <Property Name="PHONE_CD" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="false" />
+    <Property Name="PHONE_TX" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+    <Property Name="MOD_DT" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Phones" Relationship="PhoneDBModel.FK_Phone_PhoneCD" FromRole="PhoneCD" ToRole="Phone" />
+  </EntityType>
+  <Association Name="FK_Phone_PhoneCD">
+    <End Role="PhoneCD" Type="PhoneDBModel.PhoneCD" Multiplicity="1" />
+    <End Role="Phone" Type="PhoneDBModel.Phone" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhoneCD">
+        <PropertyRef Name="PHONE_CD" />
+      </Principal>
+      <Dependent Role="Phone">
+        <PropertyRef Name="PHONE_CD" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Applicant">
+    <Key>
+      <PropertyRef Name="APPLICANT_ID" />
+    </Key>
+    <Property Type="Decimal" Name="APPLICANT_ID" Nullable="false" Precision="18" Scale="0" />
+    <Property Type="String" Name="LAST_NAME_TX" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="FIRST_NAME_TX" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="MIDDLE_INITIAL_TX" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="SUFFIX_TX" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="SSN_TX" Nullable="false" MaxLength="9" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="MOD_DT" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Phones" Relationship="PhoneDBModel.FK_Phone_Applicant" FromRole="Applicant" ToRole="Phone" />
+  </EntityType>
+  <Association Name="FK_Phone_Applicant">
+    <End Type="PhoneDBModel.Applicant" Role="Applicant" Multiplicity="1" />
+    <End Type="PhoneDBModel.Phone" Role="Phone" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Applicant">
+        <PropertyRef Name="APPLICANT_ID" />
+      </Principal>
+      <Dependent Role="Phone">
+        <PropertyRef Name="APPLICANT_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
